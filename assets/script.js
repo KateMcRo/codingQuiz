@@ -11,8 +11,9 @@ const answerElC = document.getElementById("C")
 const answerElD = document.getElementById("D")
 
 // Variables 
-var secondsLeft = 10;
+var secondsLeft = 90;
 var questionIndex = 0;
+var timerInterval; 
 
 const question1 = {
     question: "What is my favorite color?",
@@ -31,7 +32,16 @@ const question2 = {
     correct: "red",
 }
 
-const questionsArray = [question1, question2]
+const question3 = {
+    question: "What is someone else's favorite oaweijf?",
+    answerA: "blue",
+    answerB: "red",
+    answerC: "yellow",
+    answerD: "green",
+    correct: "red",
+}
+
+const questionsArray = [question1, question2, question3]
 const firstQuestion = questionsArray[questionIndex]
 
 // Functions
@@ -43,24 +53,22 @@ function handleStartGame() {
 }
 
 function handleTimer() {
-    const timerInterval = setInterval(()=>handleCountdown(timerInterval), 1000) 
+  timerInterval = setInterval(()=>handleCountdown(timerInterval), 1000) 
 }
 
 function handleCountdown(interval) {
     timeEl.textContent = `Time Left: ${secondsLeft}`
-    if (secondsLeft === 0) {
+    if (secondsLeft <= 0) {
         clearInterval(interval);
     }
     return secondsLeft--;
 }
 
 function handleUpdateDisplay() {
-    console.log("aiwoefj")
     questionContainerEl.style.display="block"
 }
 
 function handleUpdateStartBtn() {
-    console.log("selkfj")
     startBtnEl.style.display="none"
 }
 
@@ -73,15 +81,42 @@ function handleFirstQuestion() {
 }
 
 function handleUpdateQuestion(event) {
-    questionIndex += 1
+    if (questionIndex === 0){
+        handleCheckAnswers(event.target.innerText, firstQuestion.correct)
+        getNextQuestion()
+    }
+    const answerClick = event.target.innerText
+    if (questionIndex < questionsArray.length && questionIndex !== 0) {
+        const currentQuestion = getNextQuestion ()
+        handleCheckAnswers(answerClick, currentQuestion.correct)
+    } else handleEndGame (timerInterval)
+}
+
+function getNextQuestion() {
     const nextQuestion = questionsArray[questionIndex]
     questionEl.innerText = nextQuestion.question
     answerElA.innerText = nextQuestion.answerA
     answerElB.innerText = nextQuestion.answerB
     answerElC.innerText = nextQuestion.answerC
     answerElD.innerText = nextQuestion.answerD
-    const answerClick = event.target.innerText
-    console.log(questionIndex)
+    return nextQuestion
+}
+
+function handleCheckAnswers(userAnswer, correctAnswer) {
+    if (userAnswer !== correctAnswer && secondsLeft >= 5) {
+        secondsLeft = secondsLeft -5
+        questionIndex += 1
+    } else if (userAnswer !== correctAnswer && secondsLeft <= 5) {
+        secondsLeft = 0
+        handleEndGame ()
+    } else if (userAnswer === correctAnswer) {
+        questionIndex += 1
+    } else handleEndGame ()
+}
+
+function handleEndGame (interval) {
+    console.log("Game Over")
+    clearInterval(interval)
 }
 
 startBtnEl.addEventListener("click", handleStartGame)
