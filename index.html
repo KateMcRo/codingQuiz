@@ -14,14 +14,25 @@
         <button id="start">Start Quiz</button>
         <h3 id="timer">Time Left:</h3>
     </header>
+
     <div id="questionContainer">
         <p id="question">Question goes here</p>
         <ol class="responses">
-            <li id="A" class="answer">A</li>
-            <li id="B" class="answer">B</li>
-            <li id="C" class="answer">C</li>
-            <li id="D" class="answer">D</li>
+            <li><button id="A" class="answer">A</button></li>
+            <li><button id="B" class="answer">B</button></li>
+            <li><button id="C" class="answer">C</button></li>
+            <li><button id="D" class="answer">D</button></li>
         </ol>
+    </div>
+
+    <div id="scoreContainer" class="hidden">
+        <form method="Post" id="setInitials">
+            <div class="inputGroup">
+                <label for="initials">Save your score:</label>
+                <input type="text" name="initials" id="initials" placeholder="type your initials" />
+                <button id="submit">Submit</button>
+            </div>
+        </form>
     </div>
 
     <script src="./assets/script.js"></script>
