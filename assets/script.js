@@ -11,7 +11,7 @@ const answerElC = document.getElementById("C")
 const answerElD = document.getElementById("D")
 
 // Variables 
-var secondsLeft = 3;
+var secondsLeft = 30;
 
 var currentIndex = 0
 
@@ -47,18 +47,23 @@ const questionsArray = [question1, question2, question3]
 
 function gameFlow () {
     questionContainerEl.style.display = "block"
+    startBtnEl.style.display = "none"
     populateQuestions ()
     setTime ()
 }
 
 function setTime () {
     const timerInterval = setInterval (function() {
+        if (secondsLeft <= 0) {
+            clearInterval(timerInterval)
+            endGame ()
+        }
+        if (currentIndex === questionsArray.length -1) {
+            clearInterval(timerInterval)
+            endGame ()
+        }
         secondsLeft--;
         timeEl.textContent = secondsLeft;
-        if (secondsLeft === 0) {
-            endGame ()
-            clearInterval(timerInterval)
-        }
     }, 1000);
 }
 
@@ -79,6 +84,12 @@ function checkAnswer (e) {
         checkIndex ()
     } else {
         console.log("FUCK YOU")
+        if (secondsLeft > 10) {
+            secondsLeft = secondsLeft -10
+        } else if (secondsLeft <= 10) {
+            secondsLeft = 0
+            timeEl.textContent = secondsLeft;
+        }
         checkIndex ()
     }
 }
@@ -92,6 +103,7 @@ function checkIndex () {
 
 function endGame () {
     console.log("Game Over SHITBIRD")
+    
 }
 
 // Event Listeners
