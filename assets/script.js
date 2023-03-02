@@ -11,7 +11,7 @@ const answerElC = document.getElementById("C")
 const answerElD = document.getElementById("D")
 
 // Variables 
-var secondsLeft = 90;
+var secondsLeft = 3;
 
 var currentIndex = 0
 
@@ -48,6 +48,18 @@ const questionsArray = [question1, question2, question3]
 function gameFlow () {
     questionContainerEl.style.display = "block"
     populateQuestions ()
+    setTime ()
+}
+
+function setTime () {
+    const timerInterval = setInterval (function() {
+        secondsLeft--;
+        timeEl.textContent = secondsLeft;
+        if (secondsLeft === 0) {
+            endGame ()
+            clearInterval(timerInterval)
+        }
+    }, 1000);
 }
 
 function populateQuestions () {
