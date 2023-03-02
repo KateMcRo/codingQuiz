@@ -12,112 +12,77 @@ const answerElD = document.getElementById("D")
 
 // Variables 
 var secondsLeft = 90;
-var questionIndex = 0;
-var timerInterval; 
+
+var currentIndex = 0
 
 const question1 = {
-    question: "What is my favorite color?",
-    answerA: "blue",
-    answerB: "red",
-    answerC: "yellow",
-    answerD: "green",
-    correct: "yellow",
+    question: "Which HTML tag is used to make text italicized?",
+    answerA: "<blockquote>",
+    answerB: "<a>",
+    answerC: "<em>",
+    answerD: "<strong>",
+    correct: "<em>",
 }
 const question2 = {
-    question: "What is someone else's favorite color?",
-    answerA: "blue",
-    answerB: "red",
-    answerC: "yellow",
-    answerD: "green",
-    correct: "red",
+    question: "Which element is a container that would include document title, scripts, styles, meta info, and more?",
+    answerA: "<head></head>",
+    answerB: "<title></title>",
+    answerC: "<body></body>",
+    answerD: "<br></br>",
+    correct: "<head></head>",
 }
 
 const question3 = {
-    question: "What is someone else's favorite oaweijf?",
-    answerA: "blue",
-    answerB: "red",
-    answerC: "yellow",
-    answerD: "green",
-    correct: "red",
+    question: "What is the name of the stylesheet that defines the presentation of an HTML or XML document?",
+    answerA: "Java",
+    answerB: "CSS",
+    answerC: "PHP",
+    answerD: "jQuery",
+    correct: "CSS",
 }
 
 const questionsArray = [question1, question2, question3]
-const firstQuestion = questionsArray[questionIndex]
 
 // Functions
-function handleStartGame() {
-    handleUpdateDisplay()
-    handleUpdateStartBtn()
-    handleFirstQuestion()
-    handleTimer()
+
+function gameFlow () {
+    questionContainerEl.style.display = "block"
+    populateQuestions ()
 }
 
-function handleTimer() {
-  timerInterval = setInterval(()=>handleCountdown(timerInterval), 1000) 
+function populateQuestions () {
+   let currentQuestion = questionsArray[currentIndex]
+    questionEl.innerText = currentQuestion.question
+    answerElA.innerText = currentQuestion.answerA
+    answerElB.innerText = currentQuestion.answerB
+    answerElC.innerText = currentQuestion.answerC
+    answerElD.innerText = currentQuestion.answerD
 }
 
-function handleCountdown(interval) {
-    timeEl.textContent = `Time Left: ${secondsLeft}`
-    if (secondsLeft <= 0) {
-        clearInterval(interval);
+function checkAnswer (e) {
+    const userSelection = e.target.innerText
+    let currentQuestion = questionsArray[currentIndex]
+    if (userSelection === currentQuestion.correct) {
+        console.log("correct")
+        checkIndex ()
+    } else {
+        console.log("FUCK YOU")
+        checkIndex ()
     }
-    return secondsLeft--;
 }
 
-function handleUpdateDisplay() {
-    questionContainerEl.style.display="block"
+function checkIndex () {
+    if (currentIndex < questionsArray.length -1) {
+        currentIndex ++
+        populateQuestions ()
+    } else return endGame ()
 }
 
-function handleUpdateStartBtn() {
-    startBtnEl.style.display="none"
+function endGame () {
+    console.log("Game Over SHITBIRD")
 }
 
-function handleFirstQuestion() {
-    questionEl.innerText = firstQuestion.question
-    answerElA.innerText = firstQuestion.answerA
-    answerElB.innerText = firstQuestion.answerB
-    answerElC.innerText = firstQuestion.answerC
-    answerElD.innerText = firstQuestion.answerD
-}
+// Event Listeners
 
-function handleUpdateQuestion(event) {
-    if (questionIndex === 0){
-        handleCheckAnswers(event.target.innerText, firstQuestion.correct)
-        getNextQuestion()
-    }
-    const answerClick = event.target.innerText
-    if (questionIndex < questionsArray.length && questionIndex !== 0) {
-        const currentQuestion = getNextQuestion ()
-        handleCheckAnswers(answerClick, currentQuestion.correct)
-    } else handleEndGame (timerInterval)
-}
-
-function getNextQuestion() {
-    const nextQuestion = questionsArray[questionIndex]
-    questionEl.innerText = nextQuestion.question
-    answerElA.innerText = nextQuestion.answerA
-    answerElB.innerText = nextQuestion.answerB
-    answerElC.innerText = nextQuestion.answerC
-    answerElD.innerText = nextQuestion.answerD
-    return nextQuestion
-}
-
-function handleCheckAnswers(userAnswer, correctAnswer) {
-    if (userAnswer !== correctAnswer && secondsLeft >= 5) {
-        secondsLeft = secondsLeft -5
-        questionIndex += 1
-    } else if (userAnswer !== correctAnswer && secondsLeft <= 5) {
-        secondsLeft = 0
-        handleEndGame ()
-    } else if (userAnswer === correctAnswer) {
-        questionIndex += 1
-    } else handleEndGame ()
-}
-
-function handleEndGame (interval) {
-    console.log("Game Over")
-    clearInterval(interval)
-}
-
-startBtnEl.addEventListener("click", handleStartGame)
-questionContainerEl.addEventListener("click", (e)=>handleUpdateQuestion(e))
+startBtnEl.addEventListener ("click", gameFlow)
+questionContainerEl.addEventListener ("click",(e)=> checkAnswer(e))
