@@ -2,6 +2,7 @@
 const startBtnEl = document.getElementById("start");
 const timeEl = document.getElementById("timer");
 const questionContainerEl = document.getElementById("questionContainer");
+const scoreContainerEl = document.getElementById("scoreContainer")
 
 const questionEl = document.getElementById("question")
 
@@ -56,12 +57,13 @@ function setTime () {
     const timerInterval = setInterval (function() {
         if (secondsLeft <= 0) {
             clearInterval(timerInterval)
-            endGame ()
+            return endGame ()
         }
-        if (currentIndex === questionsArray.length -1) {
+        if (currentIndex > questionsArray.length -1) {
             clearInterval(timerInterval)
-            endGame ()
+            return endGame ()
         }
+  
         secondsLeft--;
         timeEl.textContent = secondsLeft;
     }, 1000);
@@ -69,11 +71,13 @@ function setTime () {
 
 function populateQuestions () {
    let currentQuestion = questionsArray[currentIndex]
-    questionEl.innerText = currentQuestion.question
-    answerElA.innerText = currentQuestion.answerA
-    answerElB.innerText = currentQuestion.answerB
-    answerElC.innerText = currentQuestion.answerC
-    answerElD.innerText = currentQuestion.answerD
+   if (currentQuestion) {
+       questionEl.innerText = currentQuestion.question
+       answerElA.innerText = currentQuestion.answerA
+       answerElB.innerText = currentQuestion.answerB
+       answerElC.innerText = currentQuestion.answerC
+       answerElD.innerText = currentQuestion.answerD
+   } else return endGame()
 }
 
 function checkAnswer (e) {
@@ -98,13 +102,18 @@ function checkIndex () {
     if (currentIndex < questionsArray.length -1) {
         currentIndex ++
         populateQuestions ()
-    } else return endGame ()
+        console.log(currentIndex)
+    } else currentIndex ++
 }
 
 function endGame () {
     console.log("Game Over SHITBIRD")
-    
+    questionContainerEl.style.display = "none"
+    console.log({secondsLeft})
+    scoreContainerEl.style.display = "block"
+
 }
+
 
 // Event Listeners
 
