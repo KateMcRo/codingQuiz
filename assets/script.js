@@ -59,13 +59,6 @@ const question3 = {
 const questionsArray = [question1, question2, question3]
 var userScoresArray = []
 
-// Sorts user scores from high to low
-let sortHighToLowScores = (array) => {
-    return array?.sort((a, b) => {
-        return b.score - a.score;
-    });
-}
-
 // Functions
 
 function gameFlow () {
@@ -75,6 +68,8 @@ function gameFlow () {
     populateQuestions ()
     setTime ()
 }
+
+// Timer Functions
 
 function setTime () {
     showElement(timeEl, "column")
@@ -93,18 +88,20 @@ function setTime () {
     }, 1000);
 }
 
-function populateQuestions () {
-   let currentQuestion = questionsArray[currentIndex]
-   if (currentQuestion) {
-       questionEl.innerText = currentQuestion.question
-       answerElA.innerText = currentQuestion.answerA
-       answerElB.innerText = currentQuestion.answerB
-       answerElC.innerText = currentQuestion.answerC
-       answerElD.innerText = currentQuestion.answerD
-   } else return endGame()
-}
+// Question Functions
 
-function checkAnswer (e) {
+function populateQuestions () {
+    let currentQuestion = questionsArray[currentIndex]
+    if (currentQuestion) {
+        questionEl.innerText = currentQuestion.question
+        answerElA.innerText = currentQuestion.answerA
+        answerElB.innerText = currentQuestion.answerB
+        answerElC.innerText = currentQuestion.answerC
+        answerElD.innerText = currentQuestion.answerD
+    } else return endGame()
+ }
+
+ function checkAnswer (e) {
     const userSelection = e.target.innerText
     let currentQuestion = questionsArray[currentIndex]
     if (userSelection === currentQuestion.correct) {
@@ -132,6 +129,8 @@ function endGame () {
     showElement(scoreFormEl)
 }
 
+// Scoreboard Functions
+
 function handleSubmit (event) {
     //prevents refresh
     event.preventDefault ()
@@ -154,10 +153,6 @@ function handleSubmit (event) {
     viewScores()
 }
 
-function handleError (message) {
-    alert(message)
-}
-
 function testCreateScorecard () {
     const allScores = JSON.parse(localStorage.getItem("scores"))
     sortHighToLowScores (allScores)
@@ -173,6 +168,27 @@ function testCreateScorecard () {
         document.getElementById("highScores").appendChild(scoreCardBody);
     }) 
 }
+
+function sortHighToLowScores (array) {
+    return array?.sort((a, b) => {
+        return b.score - a.score;
+    });
+}
+
+// Error Functions
+
+function handleError (message) {
+    alert(message)
+}
+
+function handleValidation() {
+    const allScores = JSON.parse(localStorage.getItem("scores"))
+    if (!allScores) {
+        return alert("No Scores Saved.")
+        }
+}
+
+// Click Functions
 
 function refresh () {
     return location.reload();
@@ -191,6 +207,8 @@ function viewScores () {
 
 }
 
+// Show/Hide Functions
+
 function hideElement(element) {
     return element.style.display = "none"
 }
@@ -202,13 +220,6 @@ function showElement(element, direction) {
     } else {
         return element.style.display = "flex"
     }
-}
-
-function handleValidation() {
-    const allScores = JSON.parse(localStorage.getItem("scores"))
-    if (!allScores) {
-        return alert("No Scores Saved.")
-        }
 }
 
 // Event Listeners
