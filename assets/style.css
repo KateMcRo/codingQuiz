@@ -1,13 +1,20 @@
-#questionContainer {
-    display: none;
-}
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}   
 
-#scoreContainer {
+.hidden {
     display: none;
 }
 
 .cardBody {
     display: flex;
-    width: 30rem;
+    width: 30vw;
     justify-content: space-between;
+} 
+
+#restart {
+    display: flex;
 }

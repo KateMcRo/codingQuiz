@@ -1,23 +1,33 @@
-// Elements
+// Button Elements
 const startBtnEl = document.getElementById("start");
 const submitBtnEl = document.getElementById("submit");
-const timeEl = document.getElementById("timer");
-const questionContainerEl = document.getElementById("questionContainer");
-const scoreFormEl = document.getElementById("scoreForm");
-const initialsEl = document.getElementById("initials");
-const scoreBoardListEl = document.getElementById("highScores");
-const scoreBoardEl = document.getElementById("scoreBoard");
+const restartBtnEl = document.getElementById("restart");
+const viewScoresBtnEl = document.getElementById("viewScores")
 
+// Timer Element
+const timeEl = document.getElementById("timer");
+
+// Question Elements
+const questionContainerEl = document.getElementById("questionContainer");
 const questionEl = document.getElementById("question")
 
+// Answer Elements
 const answerElA = document.getElementById("A")
 const answerElB = document.getElementById("B")
 const answerElC = document.getElementById("C")
 const answerElD = document.getElementById("D")
 
+// Scoreboard Elements
+const scoreFormEl = document.getElementById("scoreForm");
+const initialsEl = document.getElementById("initials");
+const scoreBoardListEl = document.getElementById("highScores");
+const scoreBoardEl = document.getElementById("scoreBoard");
+const restartContainerEl = document.getElementById("restartContainer");
+
 // Variables 
 var secondsLeft = 30;
 
+// Tracks question array index
 var currentIndex = 0
 
 const question1 = {
@@ -49,8 +59,9 @@ const question3 = {
 const questionsArray = [question1, question2, question3]
 var userScoresArray = []
 
+// Sorts user scores from high to low
 let sortHighToLowScores = (array) => {
-    return array.sort((a, b) => {
+    return array?.sort((a, b) => {
         return b.score - a.score;
     });
 }
@@ -58,13 +69,15 @@ let sortHighToLowScores = (array) => {
 // Functions
 
 function gameFlow () {
-    questionContainerEl.style.display = "block"
-    startBtnEl.style.display = "none"
+    showElement(questionContainerEl, "column")
+    hideElement(startBtnEl)
+    hideElement(viewScoresBtnEl)
     populateQuestions ()
     setTime ()
 }
 
 function setTime () {
+    showElement(timeEl, "column")
     const timerInterval = setInterval (function() {
         if (secondsLeft <= 0) {
             clearInterval(timerInterval)
@@ -72,11 +85,11 @@ function setTime () {
         }
         if (currentIndex > questionsArray.length -1) {
             clearInterval(timerInterval)
+            timeEl.textContent = "Time Left: " + secondsLeft;
             return endGame ()
         }
-  
         secondsLeft--;
-        timeEl.textContent = secondsLeft;
+        timeEl.textContent = "Time Left: " + secondsLeft;
     }, 1000);
 }
 
@@ -115,15 +128,15 @@ function checkIndex () {
 }
 
 function endGame () {
-    questionContainerEl.style.display = "none"
-    scoreFormEl.style.display = "block"
+    hideElement(questionContainerEl)
+    showElement(scoreFormEl)
 }
 
 function handleSubmit (event) {
     //prevents refresh
     event.preventDefault ()
     if (initialsEl.value === "" ) {
-        return handleError ()
+        return handleError ("Please enter your initials.")
     } else {
         const localJSON = localStorage.getItem("scores")
         if (localJSON) {
@@ -137,19 +150,18 @@ function handleSubmit (event) {
         const stringifiedData = JSON.stringify(userScoresArray)
         localStorage.setItem("scores", stringifiedData)
     }
-    scoreFormEl.style.display = "none"
-    testCreateScorecard ()
+    hideElement(scoreFormEl)
+    viewScores()
 }
 
-function handleError () {
-    alert("Please enter your initials.")
+function handleError (message) {
+    alert(message)
 }
-
 
 function testCreateScorecard () {
     const allScores = JSON.parse(localStorage.getItem("scores"))
     sortHighToLowScores (allScores)
-    allScores.forEach((score, i)=> {
+    allScores?.forEach((score, i)=> {
         const scoreCardBody = document.createElement("li");
         scoreCardBody.setAttribute("class", "cardBody")
         const scoreCardInitials = document.createElement("p");
@@ -159,9 +171,44 @@ function testCreateScorecard () {
         scoreCardBody.appendChild(scoreCardInitials);
         scoreCardBody.appendChild(scoreCardScore);
         document.getElementById("highScores").appendChild(scoreCardBody);
-        
-    })
-  
+    }) 
+}
+
+function refresh () {
+    return location.reload();
+}
+
+function viewScores () {
+    const allScores = JSON.parse(localStorage.getItem("scores"))
+    if (!allScores) {
+        return handleError("No scores saved.")
+        }
+    hideElement(startBtnEl)
+    hideElement(viewScoresBtnEl)
+    showElement(scoreBoardEl, "column")
+    showElement(restartContainerEl)
+    testCreateScorecard ()
+
+}
+
+function hideElement(element) {
+    return element.style.display = "none"
+}
+
+function showElement(element, direction) {
+    if (direction === "column") {
+        element.style.display = "flex"
+        return element.style.flexDirection = "column"
+    } else {
+        return element.style.display = "flex"
+    }
+}
+
+function handleValidation() {
+    const allScores = JSON.parse(localStorage.getItem("scores"))
+    if (!allScores) {
+        return alert("No Scores Saved.")
+        }
 }
 
 // Event Listeners
@@ -169,3 +216,5 @@ function testCreateScorecard () {
 startBtnEl.addEventListener ("click", gameFlow)
 submitBtnEl.addEventListener ("click", (e)=> handleSubmit(e))
 questionContainerEl.addEventListener ("click",(e)=> checkAnswer(e))
+restartBtnEl.addEventListener ("click", refresh)
+viewScoresBtnEl.addEventListener ("click", viewScores)

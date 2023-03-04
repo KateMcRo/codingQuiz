@@ -8,16 +8,17 @@
     <title>Timed Coding Quiz</title>
 </head>
 <body>
-    <header class="titleContainer">
+    <header class="titleContainer center">
         <h1 class="title">Timed Coding Quiz</h1>
-        <h2 class="instructions">Instructions...</h2>
+        <h2 class="instructions">You have 30 seconds to answer basic coding questions. Wrong answers result in a 10 second deduction to the timer.</h2>
         <button id="start">Start Quiz</button>
-        <h3 id="timer">Time Left:</h3>
+        <button id="viewScores">View Scores</button>
+        <h3 id="timer" class="hidden">Time Left:</h3>
     </header>
 
-    <div id="questionContainer">
-        <p id="question">Question goes here</p>
-        <ol class="responses">
+    <div id="questionContainer" class="hidden center">
+        <p id="question" class="center">Question goes here</p>
+        <ol class="responses center">
             <li><button id="A" class="answer"></button></li>
             <li><button id="B" class="answer"></button></li>
             <li><button id="C" class="answer"></button></li>
@@ -25,8 +26,8 @@
         </ol>
     </div>
 
-    <div id="scoreForm" class="hidden">
-        <form method="Post" id="setInitials">
+    <div id="scoreForm" class="hidden center">
+        <form method="Post" id="setInitials" class="center">
             <div class="inputGroup">
                 <label for="initials">Save your score:</label>
                 <input maxlength="3" type="text" name="initials" id="initials" placeholder="type your initials" />
@@ -34,9 +35,12 @@
             </div>
         </form>
     </div>
-    <div id="scoreBoard" class="hidden">
-        <h4>High Scores</h4>
-        <ol id="highScores"></ol>
+    <div id="scoreBoard" class="hidden center">
+        <h4 class="center">High Scores</h4>
+        <ol id="highScores" class="center"></ol>
+    </div>
+    <div id="restartContainer" class="hidden center">    
+        <button id="restart" class="center">Back to Start</button>
     </div>
     <script src="./assets/script.js"></script>
 </body>
