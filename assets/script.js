@@ -49,6 +49,12 @@ const question3 = {
 const questionsArray = [question1, question2, question3]
 var userScoresArray = []
 
+let sortHighToLowScores = (array) => {
+    return array.sort((a, b) => {
+        return b.score - a.score;
+    });
+}
+
 // Functions
 
 function gameFlow () {
@@ -89,10 +95,8 @@ function checkAnswer (e) {
     const userSelection = e.target.innerText
     let currentQuestion = questionsArray[currentIndex]
     if (userSelection === currentQuestion.correct) {
-        console.log("correct")
         checkIndex ()
     } else {
-        console.log("FUCK YOU")
         if (secondsLeft > 10) {
             secondsLeft = secondsLeft -10
         } else if (secondsLeft <= 10) {
@@ -107,43 +111,31 @@ function checkIndex () {
     if (currentIndex < questionsArray.length -1) {
         currentIndex ++
         populateQuestions ()
-        console.log(currentIndex)
     } else currentIndex ++
 }
 
 function endGame () {
-    console.log("Game Over SHITBIRD")
     questionContainerEl.style.display = "none"
-    console.log({secondsLeft})
     scoreFormEl.style.display = "block"
-
 }
 
 function handleSubmit (event) {
     //prevents refresh
     event.preventDefault ()
-    //if theres no value return error message
     if (initialsEl.value === "" ) {
         return handleError ()
     } else {
-        //creates variable, gets item = [{ initials: MR, score: 7}, {initials: KR, score: 9}] from local storage
-        const localJSON = localStorage.getItem("scores") // round 1 does not exist = undefined |-----| round 2: localJson = "[{initials: , score: }]"
-        //if there is are stored scores, create a variable & parse the data. console log the previous scores
-        if (localJSON) { // because localJson = undefined on round 1 this statement doesn't run |----| this now exsits as "[{initials: , score: }]"
-            const allUserScores = JSON.parse(localJSON) // all user scores = array of objects ---> parses string back into an array = [{initials: , score: }]
-            console.log("all user scores here", allUserScores)
-            allUserScores.forEach(value => { // steps through each value, and gets the object at each index
-                console.log("each value that was in allUserScores", value) // value = { initials: , score: }
-                userScoresArray.push(value) // pushes each value into userScoresArray
-                
+        const localJSON = localStorage.getItem("scores")
+        if (localJSON) {
+            const allUserScores = JSON.parse(localJSON) 
+            allUserScores.forEach(value => { 
+                userScoresArray.push(value)
             });
         }
-        //creates new variable, adds it to array, stringifies, and saves it to local storage
-        const userObject = {initials: initialsEl.value, score: secondsLeft} // user object
-        userScoresArray.push (userObject) // pushes user object {initials, scores} into array
-        console.log("user scores Array here", userScoresArray)
-        const stringifiedData = JSON.stringify(userScoresArray) // "[{initials: , score: }]"
-        localStorage.setItem("scores", stringifiedData) // localstorage = {key: "scores", value: "[{initials: , score:}]""}
+        const userObject = {initials: initialsEl.value, score: secondsLeft}
+        userScoresArray.push (userObject)
+        const stringifiedData = JSON.stringify(userScoresArray)
+        localStorage.setItem("scores", stringifiedData)
     }
     scoreFormEl.style.display = "none"
     testCreateScorecard ()
@@ -152,23 +144,21 @@ function handleSubmit (event) {
 function handleError () {
     alert("Please enter your initials.")
 }
-/* /* 
-function renderScoreBoard () {
-    scoreBoardEl.style.display = "block"
-    const allScores = JSON.parse(localStorage.getItem("scores"))
-    allScores.forEach((score)=> {
-        const scoreCard = createScorecard(score)
-        scoreBoardEl.append(scoreCard)
-    })
-} */
+
 
 function testCreateScorecard () {
     const allScores = JSON.parse(localStorage.getItem("scores"))
-    console.log(allScores)
-    allScores.forEach((score)=> {
-        const listItem = document.createElement("li");
-        listItem.innerText = score.initials + "_________________" + score.score;
-        document.getElementById("highScores").appendChild(listItem);
+    sortHighToLowScores (allScores)
+    allScores.forEach((score, i)=> {
+        const scoreCardBody = document.createElement("li");
+        scoreCardBody.setAttribute("class", "cardBody")
+        const scoreCardInitials = document.createElement("p");
+        const scoreCardScore = document.createElement("p");
+        scoreCardInitials.innerText = `${i +1}. ${score.initials}`
+        scoreCardScore.innerText = score.score;
+        scoreCardBody.appendChild(scoreCardInitials);
+        scoreCardBody.appendChild(scoreCardScore);
+        document.getElementById("highScores").appendChild(scoreCardBody);
         
     })
   

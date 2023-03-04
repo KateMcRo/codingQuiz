@@ -5,3 +5,9 @@
 #scoreContainer {
     display: none;
 }
+
+.cardBody {
+    display: flex;
+    width: 30rem;
+    justify-content: space-between;
+}
