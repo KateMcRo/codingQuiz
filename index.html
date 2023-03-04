@@ -25,16 +25,19 @@
         </ol>
     </div>
 
-    <div id="scoreContainer" class="hidden">
+    <div id="scoreForm" class="hidden">
         <form method="Post" id="setInitials">
             <div class="inputGroup">
                 <label for="initials">Save your score:</label>
-                <input type="text" name="initials" id="initials" placeholder="type your initials" />
-                <button id="submit">Submit</button>
+                <input maxlength="3" type="text" name="initials" id="initials" placeholder="type your initials" />
+                <button id="submit" type="button">Submit</button>
             </div>
         </form>
     </div>
-
+    <div id="scoreBoard" class="hidden">
+        <h4>High Scores</h4>
+        <ol id="highScores"></ol>
+    </div>
     <script src="./assets/script.js"></script>
 </body>
 </html>

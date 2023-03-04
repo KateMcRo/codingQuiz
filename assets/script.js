@@ -1,8 +1,12 @@
 // Elements
 const startBtnEl = document.getElementById("start");
+const submitBtnEl = document.getElementById("submit");
 const timeEl = document.getElementById("timer");
 const questionContainerEl = document.getElementById("questionContainer");
-const scoreContainerEl = document.getElementById("scoreContainer")
+const scoreFormEl = document.getElementById("scoreForm");
+const initialsEl = document.getElementById("initials");
+const scoreBoardListEl = document.getElementById("highScores");
+const scoreBoardEl = document.getElementById("scoreBoard");
 
 const questionEl = document.getElementById("question")
 
@@ -43,6 +47,7 @@ const question3 = {
 }
 
 const questionsArray = [question1, question2, question3]
+var userScoresArray = []
 
 // Functions
 
@@ -110,12 +115,67 @@ function endGame () {
     console.log("Game Over SHITBIRD")
     questionContainerEl.style.display = "none"
     console.log({secondsLeft})
-    scoreContainerEl.style.display = "block"
+    scoreFormEl.style.display = "block"
 
 }
 
+function handleSubmit (event) {
+    //prevents refresh
+    event.preventDefault ()
+    //if theres no value return error message
+    if (initialsEl.value === "" ) {
+        return handleError ()
+    } else {
+        //creates variable, gets item = [{ initials: MR, score: 7}, {initials: KR, score: 9}] from local storage
+        const localJSON = localStorage.getItem("scores") // round 1 does not exist = undefined |-----| round 2: localJson = "[{initials: , score: }]"
+        //if there is are stored scores, create a variable & parse the data. console log the previous scores
+        if (localJSON) { // because localJson = undefined on round 1 this statement doesn't run |----| this now exsits as "[{initials: , score: }]"
+            const allUserScores = JSON.parse(localJSON) // all user scores = array of objects ---> parses string back into an array = [{initials: , score: }]
+            console.log("all user scores here", allUserScores)
+            allUserScores.forEach(value => { // steps through each value, and gets the object at each index
+                console.log("each value that was in allUserScores", value) // value = { initials: , score: }
+                userScoresArray.push(value) // pushes each value into userScoresArray
+                
+            });
+        }
+        //creates new variable, adds it to array, stringifies, and saves it to local storage
+        const userObject = {initials: initialsEl.value, score: secondsLeft} // user object
+        userScoresArray.push (userObject) // pushes user object {initials, scores} into array
+        console.log("user scores Array here", userScoresArray)
+        const stringifiedData = JSON.stringify(userScoresArray) // "[{initials: , score: }]"
+        localStorage.setItem("scores", stringifiedData) // localstorage = {key: "scores", value: "[{initials: , score:}]""}
+    }
+    scoreFormEl.style.display = "none"
+    testCreateScorecard ()
+}
+
+function handleError () {
+    alert("Please enter your initials.")
+}
+/* /* 
+function renderScoreBoard () {
+    scoreBoardEl.style.display = "block"
+    const allScores = JSON.parse(localStorage.getItem("scores"))
+    allScores.forEach((score)=> {
+        const scoreCard = createScorecard(score)
+        scoreBoardEl.append(scoreCard)
+    })
+} */
+
+function testCreateScorecard () {
+    const allScores = JSON.parse(localStorage.getItem("scores"))
+    console.log(allScores)
+    allScores.forEach((score)=> {
+        const listItem = document.createElement("li");
+        listItem.innerText = score.initials + "_________________" + score.score;
+        document.getElementById("highScores").appendChild(listItem);
+        
+    })
+  
+}
 
 // Event Listeners
 
 startBtnEl.addEventListener ("click", gameFlow)
+submitBtnEl.addEventListener ("click", (e)=> handleSubmit(e))
 questionContainerEl.addEventListener ("click",(e)=> checkAnswer(e))
