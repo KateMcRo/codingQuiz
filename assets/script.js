@@ -31,29 +31,29 @@ var secondsLeft = 30;
 var currentIndex = 0
 
 const question1 = {
-    question: "Which HTML tag is used to make text italicized?",
-    answerA: "<blockquote>",
-    answerB: "<a>",
-    answerC: "<em>",
-    answerD: "<strong>",
-    correct: "<em>",
+    question: "Inside which HTML element do we put the JavaScript?",
+    answerA: "<js>",
+    answerB: "<javascript>",
+    answerC: "<script>",
+    answerD: "<scripting>",
+    correct: "<script>",
 }
 const question2 = {
-    question: "Which element is a container that would include document title, scripts, styles, meta info, and more?",
-    answerA: "<head></head>",
-    answerB: "<title></title>",
-    answerC: "<body></body>",
-    answerD: "<br></br>",
-    correct: "<head></head>",
+    question: "How would you write `Hello` in an alert box?",
+    answerA: "alert(`Hello`)",
+    answerB: "alertBox(`Hello`)",
+    answerC: "popUp(`Hello`)",
+    answerD: "msg(`Hello`)",
+    correct: "alert(`Hello`)",
 }
 
 const question3 = {
-    question: "What is the name of the stylesheet that defines the presentation of an HTML or XML document?",
-    answerA: "Java",
-    answerB: "CSS",
-    answerC: "PHP",
-    answerD: "jQuery",
-    correct: "CSS",
+    question: "How do you call a function named `myFunction`?",
+    answerA: "= myFunction()",
+    answerB: "myFunction()",
+    answerC: "call myFunction()",
+    answerD: "call = myFunction()",
+    correct: "myFunction()",
 }
 
 const questionsArray = [question1, question2, question3]
