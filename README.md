@@ -18,7 +18,7 @@ Click "Start Game" to begin quiz. Select one of the answers to the question to m
 
 ![Example of question in coding quiz](assets/codingQuizSS.png)
 
-
+[Deployed Coding Quiz](https://katemcro.github.io/codingQuiz/)
 
 
 ## License
